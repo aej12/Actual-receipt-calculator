@@ -1,38 +1,69 @@
-<div id="result-screen" style="display: none;">
-    <h1>분석 결과</h1>
-    
-    <div class="result-card amount-section">
-        <div class="label-sub">월 예상 실수령액</div>
-        <div class="amount" id="net-pay">0원</div>
-        <div id="gross-pay" class="label-sub-small">세전 월 0원 기준</div>
-    </div>
-
-    <div class="result-card position-section">
-        <span class="p-label" id="percent-title">2026년 1인 가구 기준</span>
-        <div class="p-value" id="median-percent">상위 0%</div>
-        <div class="progress-bar-container">
-            <div id="progress-fill" class="progress-fill"></div>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 연봉 계산기</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="input-screen">
+            <h1>2026 연봉 계산기</h1>
+            <div class="input-wrapper">
+                <input type="number" id="salary-input" placeholder="연봉 입력">
+                <span class="unit">만원</span>
+            </div>
+            <div class="select-group">
+                <label>부양가족 수</label>
+                <select id="family-count">
+                    <option value="1">1명 (본인)</option>
+                    <option value="2">2명</option>
+                    <option value="3">3명</option>
+                    <option value="4">4명</option>
+                </select>
+            </div>
+            <button class="btn-submit" onclick="startCalc()">분석하기</button>
         </div>
-        <p class="notice">* 중위소득 100%를 상위 50% 지점으로 산정</p>
-    </div>
 
-    <div class="result-card guide-section">
-        <h3>🏆 2026 소득 목표 가이드</h3>
-        <div class="guide-item">
-            <span>상위 10% 진입</span>
-            <strong id="top-10-val">0원</strong>
+        <div id="ad-overlay" style="display: none;">
+            <div class="loader"></div>
+            <h2>분석 완료!</h2>
+            <a href="https://link.coupang.com/a/d3jyTd" target="_blank" class="ad-btn" onclick="linkClick()">결과 확인하기</a>
         </div>
-        <div class="guide-item">
-            <span>상위 20% 진입</span>
-            <strong id="top-20-val">0원</strong>
-        </div>
-        <p class="guide-tip">※ 위 금액(세전) 이상일 때 해당 구간 진입이 예측됩니다.</p>
-    </div>
 
-    <div class="detail-list" id="tax-details"></div>
-    <div class="compare-section">
-        <div class="chart-box"><canvas id="medianChart"></canvas></div>
+        <div id="result-screen" style="display: none;">
+            <div class="result-card amount-section">
+                <div class="label-sub">월 예상 실수령액</div>
+                <div class="amount" id="net-pay">0원</div>
+                <div id="gross-pay" class="label-sub-small">세전 월 0원 기준</div>
+            </div>
+
+            <div class="result-card position-section">
+                <span class="p-label" id="percent-title">2026년 기준</span>
+                <div class="p-value" id="median-percent">상위 0%</div>
+                <div class="progress-bar-container">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="result-card guide-section">
+                <h3>🏆 소득 목표 가이드</h3>
+                <div class="guide-item">
+                    <span>상위 10% 진입</span>
+                    <strong id="top-10-val">0원</strong>
+                </div>
+                <div class="guide-item">
+                    <span>상위 20% 진입</span>
+                    <strong id="top-20-val">0원</strong>
+                </div>
+            </div>
+
+            <div class="chart-box"><canvas id="medianChart"></canvas></div>
+            <button class="btn-reset" onclick="resetCalc()">다시 계산하기</button>
+        </div>
     </div>
-    
-    <button class="btn-reset" onclick="resetCalc()">다시 계산하기</button>
-</div>
+    <script src="script.js"></script>
+</body>
+</html>
