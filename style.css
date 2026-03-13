@@ -1,26 +1,70 @@
-:root { --main-blue: #3182f6; --bg-gray: #f2f4f6; }
-body { font-family: -apple-system, sans-serif; background: var(--bg-gray); margin: 0; padding: 20px; }
-.container { max-width: 500px; margin: 0 auto; }
-
-.result-card { 
-    background: #fff; border-radius: 20px; padding: 25px; 
-    margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+:root {
+    --point-color: #FF7A00;
+    --bg-color: #F2F4F6;
+    --card-bg: #FFFFFF;
+    --text-main: #191F28;
+    --text-sub: #8B95A1;
+    --border-color: #E5E8EB;
+    --toss-blue: #3182F6;
 }
 
-h1 { text-align: center; color: #191f28; }
-.amount { font-size: 32px; font-weight: bold; color: var(--main-blue); margin: 10px 0; }
-.p-value { font-size: 28px; font-weight: bold; margin: 10px 0; }
+body { font-family: 'Pretendard Variable', sans-serif; background: var(--bg-color); color: var(--text-main); margin: 0; padding: 20px; display: flex; justify-content: center; }
+.container { width: 100%; max-width: 440px; background: var(--card-bg); padding: 32px 24px; border-radius: 24px; box-shadow: 0 8px 30px rgba(0,0,0,0.04); box-sizing: border-box; }
 
-.progress-bar-container { width: 100%; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
-.progress-fill { height: 100%; background: var(--main-blue); width: 0%; transition: width 1s; }
+h1 { font-size: 22px; margin-bottom: 8px; font-weight: 700; }
+.subtitle { color: var(--text-sub); font-size: 14px; margin-bottom: 32px; }
 
-.guide-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f9fafb; }
-.guide-item strong { color: var(--main-blue); }
+/* 블로그 배너 */
+.blog-banner { background-color: #F2F4F6; padding: 14px; border-radius: 14px; text-align: center; margin-bottom: 24px; }
+.blog-banner a { text-decoration: none; color: #4E5968; font-size: 14px; font-weight: 500; }
+.blog-banner strong { color: var(--toss-blue); font-weight: 700; }
 
-.input-wrapper { display: flex; align-items: center; background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-input { border: none; font-size: 20px; width: 100%; outline: none; }
-.btn-submit, .ad-btn, .btn-reset { 
-    width: 100%; padding: 15px; border-radius: 12px; border: none; 
-    background: var(--main-blue); color: #fff; font-size: 16px; font-weight: bold; cursor: pointer; 
-}
-.chart-box { height: 200px; margin: 20px 0; }
+/* % 카드 */
+.percent-container { margin-bottom: 24px; }
+.percent-card { background: #F9FAFB; padding: 20px; border-radius: 16px; text-align: center; }
+.p-label { display: block; font-size: 12px; color: var(--text-sub); margin-bottom: 6px; }
+.p-value { font-size: 24px; font-weight: 800; color: var(--point-color); }
+
+/* 입력창 */
+.input-wrapper { position: relative; margin-bottom: 24px; }
+input[type="number"] { width: 100%; font-size: 24px; font-weight: 700; border: none; border-bottom: 2px solid var(--border-color); padding: 12px 0; outline: none; background: transparent; }
+.unit { position: absolute; right: 0; top: 12px; font-size: 20px; font-weight: 600; }
+
+.input-row-group { display: flex; gap: 10px; margin-bottom: 8px; }
+.select-group { flex: 1; display: flex; flex-direction: column; }
+.select-group label { font-size: 11px; color: var(--text-sub); margin-bottom: 6px; }
+select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 12px; font-size: 14px; background: #F9FAFB; outline: none; }
+.info-text { font-size: 11px; color: var(--text-sub); margin-bottom: 24px; line-height: 1.4; }
+
+.btn-submit { width: 100%; background: var(--point-color); color: white; border: none; border-radius: 14px; padding: 18px; font-size: 16px; font-weight: 600; cursor: pointer; }
+
+/* 결과 및 비교 */
+.result-header { background: var(--bg-color); border-radius: 18px; padding: 24px; text-align: center; margin-bottom: 24px; }
+.amount { font-size: 32px; font-weight: 800; color: var(--point-color); margin: 6px 0; }
+.label-sub-small { font-size: 13px; color: var(--text-sub); }
+.detail-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border-color); font-size: 15px; }
+.total-wage { border: none; color: var(--point-color); font-weight: 700; }
+
+.compare-section { margin-top: 40px; border-top: 8px solid var(--bg-color); padding-top: 24px; }
+.chart-box { height: 220px; margin-bottom: 24px; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--border-color); border-radius: 12px; }
+table { width: 100%; min-width: 450px; border-collapse: collapse; font-size: 11px; }
+th, td { padding: 10px; border-bottom: 1px solid var(--border-color); text-align: right; }
+th { background: #F9FAFB; text-align: center; color: var(--text-sub); }
+th:first-child, td:first-child { text-align: center; font-weight: 600; }
+
+/* 광고창 */
+#ad-overlay { flex-direction: column; align-items: center; padding: 40px 0; text-align: center; }
+.ad-btn { display: inline-block; background: #0073E6; color: white; text-decoration: none; padding: 16px 28px; border-radius: 12px; font-weight: 700; font-size: 17px; margin: 10px 0; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+.loader { border: 3px solid #f3f3f3; border-top: 3px solid var(--point-color); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-bottom: 16px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.ad-notice-bottom { font-size: 11px; color: #CCC; text-align: center; margin-top: 25px; }
+.btn-reset { width: 100%; background: #EEE; border: none; border-radius: 12px; padding: 14px; margin-top: 20px; cursor: pointer; }
+
+.table-scroll { width: 100%; overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid #eee; }
+table { width: 100%; min-width: 500px; border-collapse: collapse; font-size: 12px; }
+th, td { padding: 12px 8px; text-align: right; border-bottom: 1px solid #f5f5f5; }
+th { background: #fafafa; text-align: center; color: #888; }
+td:first-child { text-align: center; font-weight: bold; background: #fafafa; }
