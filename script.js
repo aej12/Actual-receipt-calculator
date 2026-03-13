@@ -1,11 +1,14 @@
 let medianChart = null;
+let savedSalary = 0;
 
+// 1. 데이터 클리닝: 마침표 제거 및 숫자형 변환 완료
 const incomeData = {
-    "2024": [2228445, 3682609, 4714657, 5729913],
-    "2025": [2392013, 3932658, 5025353, 6097773],
-    "2026": [2564238, 4199292, 5359036, 6494738]
+    "2024": [2228445, 3682609, 4714657, 5729913, 6695735, 7618369],
+    "2025": [2392013, 3932658, 5025353, 6097773, 7108192, 8064805],
+    "2026": [2564238, 4199292, 5359036, 6494738, 7556719, 8555952]
 };
 
+// 2. 억 단위 표기 함수 (유저 요청 반영)
 function formatMoney(num) {
     if (num >= 100000000) {
         const eok = Math.floor(num / 100000000);
@@ -16,7 +19,9 @@ function formatMoney(num) {
 }
 
 function startCalc() {
-    if (!document.getElementById('salary-input').value) return alert("연봉을 입력하세요");
+    const val = document.getElementById('salary-input').value;
+    if (!val) return alert("연봉을 입력해주세요.");
+    savedSalary = val;
     document.getElementById('input-screen').style.display = 'none';
     document.getElementById('ad-overlay').style.display = 'flex';
 }
@@ -24,48 +29,86 @@ function startCalc() {
 function linkClick() {
     setTimeout(() => {
         document.getElementById('ad-overlay').style.display = 'none';
-        const annual = document.getElementById('salary-input').value * 10000;
-        showResults(annual);
+        showResults(savedSalary * 10000);
     }, 1000);
 }
 
 function showResults(annual) {
     const monthlyGross = Math.floor(annual / 12);
     const familyCount = parseInt(document.getElementById('family-count').value);
-    const m2026 = incomeData["2026"][familyCount - 1];
+    
+    // 계산 로직
+    const pension = Math.floor(Math.min(monthlyGross, 6370000) * 0.045);
+    const health = Math.floor(monthlyGross * 0.03545);
+    const care = Math.floor(health * 0.1295);
+    const emp = Math.floor(monthlyGross * 0.009);
+    const incomeTax = Math.floor(monthlyGross * 0.05); 
+    const localTax = Math.floor(incomeTax * 0.1);
+    const netPay = monthlyGross - (pension + health + care + emp + incomeTax + localTax);
 
-    // 위치 계산
-    const ratio = monthlyGross / m2026;
-    let topPercent = ratio >= 1 ? Math.max(1, Math.round(50 / ratio)) : Math.min(99, Math.round(100 - (ratio * 50)));
-
-    // 가이드라인
-    const t10 = m2026 * 2.5;
-    const t20 = m2026 * 1.8;
-
-    // UI 출력
+    // UI 업데이트
     document.getElementById('result-screen').style.display = 'block';
-    document.getElementById('net-pay').innerText = (monthlyGross * 0.85).toLocaleString() + "원"; // 약식 세후
-    document.getElementById('gross-pay').innerText = `세전 월 ${formatMoney(monthlyGross)} 기준`;
-    document.getElementById('median-percent').innerText = `상위 ${topPercent}%`;
-    document.getElementById('progress-fill').style.width = `${100 - topPercent}%`;
-    document.getElementById('top-10-val').innerText = formatMoney(t10);
-    document.getElementById('top-20-val').innerText = formatMoney(t20);
+    document.getElementById('net-pay').innerText = netPay.toLocaleString() + '원';
+    
+    // [수정된 부분] 억 단위 포맷함수를 적용하여 세전 월 소득 표시
+    document.getElementById('gross-pay').innerText = `월 소득액 ${formatMoney(monthlyGross)}`;
+    
+    // [핵심 수정] 중위소득 대비 상위 % 계산
+    const idx = familyCount - 1;
+    const m2026 = incomeData["2026"][idx];
+    
+    // 중위소득(100%)을 상위 50% 지점으로 기준 잡고 산출
+    const ratio = monthlyGross / m2026;
+    let topPercent;
+    if (ratio >= 1) {
+        // 중위소득보다 높을 때 (상위 50% 이내)
+        topPercent = Math.max(1, Math.round(50 / ratio));
+    } else {
+        // 중위소득보다 낮을 때 (하위 50% 이내)
+        topPercent = Math.min(99, Math.round(100 - (ratio * 50)));
+    }
 
-    renderChart(familyCount - 1);
+    document.getElementById('percent-title').innerText = `2026년 ${familyCount}인 가구 기준 소득 위치`;
+    document.getElementById('median-percent').innerText = `상위 ${topPercent}%`;
+
+    // 상세 항목
+    document.getElementById('tax-pension').innerText = pension.toLocaleString() + '원';
+    document.getElementById('tax-health').innerText = health.toLocaleString() + '원';
+    document.getElementById('tax-care').innerText = care.toLocaleString() + '원';
+    document.getElementById('tax-emp').innerText = emp.toLocaleString() + '원';
+    document.getElementById('tax-income').innerText = incomeTax.toLocaleString() + '원';
+    document.getElementById('tax-local').innerText = localTax.toLocaleString() + '원';
+
+    renderTable();
+    renderChart(idx, familyCount);
 }
 
-function renderChart(idx) {
+function renderTable() {
+    const tbody = document.querySelector('#median-table tbody');
+    tbody.innerHTML = '';
+    Object.keys(incomeData).forEach(year => {
+        const tr = document.createElement('tr');
+        let html = `<td>${year}</td>`;
+        incomeData[year].forEach(v => html += `<td>${v.toLocaleString()}</td>`);
+        tr.innerHTML = html;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderChart(idx, count) {
     const ctx = document.getElementById('medianChart').getContext('2d');
     if (medianChart) medianChart.destroy();
     medianChart = new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['24년', '25년', '26년'],
+            labels: ['2024년', '2025년', '2026년'],
             datasets: [{
-                label: '중위소득 추이',
+                label: `${count}인 가구 중위소득`,
                 data: [incomeData["2024"][idx], incomeData["2025"][idx], incomeData["2026"][idx]],
-                borderColor: '#3182f6',
-                fill: false
+                borderColor: '#FF7A00',
+                tension: 0.3,
+                fill: true,
+                backgroundColor: 'rgba(255,122,0,0.05)'
             }]
         },
         options: { responsive: true, maintainAspectRatio: false }
@@ -73,5 +116,6 @@ function renderChart(idx) {
 }
 
 function resetCalc() {
-    location.reload(); // 가장 확실한 초기화
+    document.getElementById('result-screen').style.display = 'none';
+    document.getElementById('input-screen').style.display = 'block';
 }
