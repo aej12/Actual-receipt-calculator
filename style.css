@@ -1,116 +1,68 @@
 :root {
-    --toss-blue: #3182F6;       /* 토스 시그니처 블루 */
-    --toss-blue-light: #E8F3FF; /* 강조 배경색 */
-    --bg-color: #F2F4F6;        /* 전체 배경 회색 */
+    --point-orange: #FF7A00;
+    --toss-blue: #3182F6;
+    --bg-main: #F2F4F6;
     --card-bg: #FFFFFF;
-    --text-main: #191F28;       /* 토스 메인 텍스트 색상 */
-    --text-sub: #4E5968;        /* 서브 텍스트 색상 */
-    --text-grey: #8B95A1;       /* 더 연한 회색 */
-    --border-color: #F2F4F6;
+    --box-bg: #F2F4F6;
+    --text-main: #191F28;
+    --text-sub: #8B95A1;
+    --border-line: #E5E8EB;
 }
 
-/* 1. 전체 중앙 정렬 및 기본 설정 */
-body { 
-    font-family: 'Pretendard Variable', -apple-system, sans-serif; 
-    background-color: var(--bg-color); 
-    color: var(--text-main); 
-    margin: 0; 
-    padding: 0; 
-    display: flex; 
-    justify-content: center; 
-    align-items: flex-start; /* 상단부터 정렬 */
-    min-height: 100vh;
-}
+body { font-family: 'Pretendard Variable', sans-serif; background: var(--bg-main); color: var(--text-main); margin: 0; padding: 20px; display: flex; justify-content: center; }
+.container { width: 100%; max-width: 440px; background: var(--card-bg); padding: 32px 24px; border-radius: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); box-sizing: border-box; }
 
-.container { 
-    width: 100%; 
-    max-width: 440px; 
-    background: var(--card-bg); 
-    margin: 20px; /* 모바일 여백 */
-    padding: 40px 24px; 
-    border-radius: 28px; /* 더 둥글게 */
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03); 
-    box-sizing: border-box; 
-}
+.main-title, .result-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: var(--text-main); }
+.subtitle { color: var(--text-sub); font-size: 14px; margin-bottom: 40px; }
 
-/* 2. 타이틀 및 텍스트 */
-h1 { font-size: 24px; margin-bottom: 12px; font-weight: 700; letter-spacing: -0.5px; }
-.subtitle { color: var(--text-sub); font-size: 15px; margin-bottom: 32px; line-height: 1.5; }
+/* 입력창 */
+.input-wrapper { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--point-orange); padding-bottom: 12px; margin-bottom: 24px; }
+.input-label { font-size: 18px; font-weight: 700; color: var(--text-sub); }
+input[type="number"] { flex: 1; font-size: 22px; font-weight: 700; border: none; text-align: right; padding-right: 8px; outline: none; }
+.unit { font-size: 18px; font-weight: 700; }
 
-/* 3. 입력창 (토스 스타일: 선만 있는 형태) */
-.input-wrapper { position: relative; margin-bottom: 40px; border-bottom: 2px solid var(--toss-blue); }
-input[type="number"] { 
-    width: 100%; 
-    font-size: 28px; 
-    font-weight: 700; 
-    border: none; 
-    padding: 12px 0; 
-    outline: none; 
-    background: transparent; 
-    color: var(--text-main);
-}
-.unit { position: absolute; right: 0; top: 16px; font-size: 20px; font-weight: 600; color: var(--text-main); }
+.input-row-group { display: flex; gap: 10px; margin-bottom: 12px; }
+.select-group { flex: 1; display: flex; flex-direction: column; }
+.select-group label { font-size: 11px; color: var(--text-sub); margin-bottom: 8px; }
+select { padding: 14px; border: 1px solid var(--border-line); border-radius: 12px; font-size: 14px; outline: none; background: #fff; }
+.info-text { font-size: 11px; color: var(--text-sub); margin-bottom: 32px; }
 
-/* 4. 버튼 (토스 블루 포인트) */
-.btn-submit { 
-    width: 100%; 
-    background: var(--toss-blue); 
-    color: white; 
-    border: none; 
-    border-radius: 16px; 
-    padding: 18px; 
-    font-size: 17px; 
-    font-weight: 600; 
-    cursor: pointer; 
-    transition: background 0.2s;
-}
-.btn-submit:active { background: #1b64da; }
+/* 버튼 */
+.btn-submit, .ad-btn { width: 100%; border: none; border-radius: 14px; padding: 18px; font-size: 16px; font-weight: 700; cursor: pointer; text-align: center; display: block; text-decoration: none; }
+.orange-btn { background: var(--point-orange); color: white; }
+.blue-btn { background: var(--toss-blue); color: white; }
+.btn-reset { width: 100%; background: var(--bg-main); color: var(--text-sub); border: none; border-radius: 14px; padding: 16px; font-weight: 600; margin-top: 20px; cursor: pointer; }
 
-/* 5. 결과 카드 (3분할 느낌의 레이아웃) */
-.result-header { 
-    background: var(--toss-blue-light); 
-    border-radius: 24px; 
-    padding: 32px 20px; 
-    text-align: center; 
-    margin-bottom: 20px; 
-}
-.amount { font-size: 34px; font-weight: 800; color: var(--toss-blue); margin: 8px 0; }
-.label-sub-small { font-size: 14px; color: var(--text-sub); font-weight: 500; }
+/* 로딩 화면 */
+#ad-overlay { flex-direction: column; align-items: center; text-align: center; padding: 40px 0; }
+.loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--point-orange); border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-bottom: 20px; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.ad-title { font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+.ad-desc { font-size: 14px; color: var(--text-main); margin-bottom: 30px; }
+.ad-notice { font-size: 11px; color: var(--text-sub); margin-top: 20px; line-height: 1.5; }
 
-/* 6. 상위 % 위치 카드 */
-.percent-card { 
-    background: #FFF; 
-    border: 1px solid #E5E8EB;
-    padding: 24px; 
-    border-radius: 24px; 
-    text-align: center; 
-    margin-bottom: 20px;
-}
-.p-label { font-size: 13px; color: var(--text-grey); margin-bottom: 8px; display: block; }
-.p-value { font-size: 26px; font-weight: 800; color: var(--text-main); }
-.p-value span { color: var(--toss-blue); } /* 상위 % 숫자만 파란색 */
+/* 결과 화면 - 배너 & 박스 */
+.blog-banner { background: var(--box-bg); padding: 14px; border-radius: 12px; text-align: center; font-size: 13px; font-weight: 500; color: var(--text-sub); margin-bottom: 20px; cursor: pointer; }
+.blog-banner .text-blue { color: var(--toss-blue); font-weight: 700; }
 
-/* 7. 상세 내역 리스트 */
-.detail-row { 
-    display: flex; 
-    justify-content: space-between; 
-    padding: 18px 4px; 
-    border-bottom: 1px solid #F2F4F6; 
-    font-size: 15px; 
-    color: var(--text-sub);
-}
-.detail-row span:last-child { color: var(--text-main); font-weight: 600; }
+.result-box { background: var(--box-bg); border-radius: 16px; padding: 24px; text-align: center; margin-bottom: 16px; }
+.label-grey { font-size: 13px; color: var(--text-sub); margin-bottom: 8px; }
+.amount-orange { font-size: 32px; font-weight: 800; color: var(--point-orange); margin-bottom: 6px; }
+.label-grey-small { font-size: 12px; color: var(--text-sub); }
 
-/* 8. 차트 및 테이블 섹션 */
-.compare-section { margin-top: 32px; padding-top: 32px; border-top: 1px solid #EEE; }
-.chart-box { height: 240px; margin-bottom: 24px; }
+/* 상세 리스트 */
+.detail-list { margin-top: 10px; }
+.detail-row { display: flex; justify-content: space-between; padding: 16px 0; border-bottom: 1px solid var(--border-line); font-size: 14px; color: var(--text-main); }
+.tax-rate { font-size: 11px; color: var(--text-sub); margin-left: 4px; }
+.point-row { color: var(--point-orange); font-weight: 700; border-bottom: none; font-size: 15px; }
 
-.table-scroll { width: 100%; overflow-x: auto; border-radius: 16px; background: #F9FAFB; padding: 8px; }
-table { width: 100%; min-width: 400px; border-collapse: collapse; font-size: 13px; }
-th { padding: 12px; color: var(--text-grey); font-weight: 500; border-bottom: 1px solid #EEE; }
-td { padding: 14px 12px; text-align: right; color: var(--text-sub); }
-td:first-child { font-weight: 600; color: var(--text-main); text-align: left; }
-
-/* 광고 및 로딩 */
-.ad-btn { background: var(--toss-blue); color: white; padding: 16px 32px; border-radius: 14px; text-decoration: none; font-weight: 700; display: inline-block; margin: 12px 0; }
-.btn-reset { background: #F2F4F6; color: var(--text-sub); border: none; border-radius: 14px; padding: 16px; width: 100%; font-weight: 600; margin-top: 24px; }
+/* 차트 및 테이블 */
+.compare-section { margin-top: 40px; border-top: 6px solid var(--bg-main); padding-top: 30px; }
+.chart-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+.chart-box { height: 220px; margin-bottom: 24px; }
+.table-scroll { border: 1px solid var(--border-line); border-radius: 12px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 12px; text-align: center; }
+th { background: #FAFAFA; padding: 12px; color: var(--text-sub); font-weight: 500; border-bottom: 1px solid var(--border-line); }
+td { padding: 12px; border-bottom: 1px solid var(--border-line); color: var(--text-main); }
+tr:nth-child(2) td { font-weight: 700; color: var(--point-orange); } /* 100% 라인 강조 */
+.ad-notice-bottom { font-size: 11px; color: var(--text-sub); text-align: center; margin-top: 16px; }
