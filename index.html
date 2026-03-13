@@ -1,112 +1,38 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026년 세후 연봉 계산기</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-</head>
-<body>
-    <div class="container">
-        <div id="input-screen">
-            <h1>2026년 세후 연봉 계산기</h1>
-            <p class="subtitle">나의 소득 수준과 실수령액을 확인해보세요.</p>
-            
-            <div class="input-wrapper">
-                <input type="number" id="salary-input" placeholder="연봉 입력">
-                <span class="unit">만원</span>
-            </div>
-
-            <div class="input-row-group">
-                <div class="select-group">
-                    <label>부양가족 수 (본인 포함)</label>
-                    <select id="family-count">
-                        <option value="1">1명 (본인만)</option>
-                        <option value="2">2명</option>
-                        <option value="3">3명</option>
-                        <option value="4">4명</option>
-                        <option value="5">5명</option>
-                        <option value="6">6명 이상</option>
-                    </select>
-                </div>
-                <div class="select-group">
-                    <label>20세 이하 자녀 수</label>
-                    <select id="child-count">
-                        <option value="0">0명</option>
-                        <option value="1">1명</option>
-                        <option value="2">2명</option>
-                        <option value="3">3명 이상</option>
-                    </select>
-                </div>
-            </div>
-            <p class="info-text">* 만 20세 이하 자녀, 만 60세 이상, 배우자의 연간 소득 100만원 이하의 수</p>
-
-            <button class="btn-submit" onclick="startCalc()">계산하기</button>
-        </div>
-
-        <div id="ad-overlay" style="display: none;">
-            <div class="loader"></div>
-            <h2>분석이 완료되었습니다!</h2>
-            <p>아래 버튼을 클릭하면 <b>상세 결과</b>가 공개됩니다.</p>
-            <a href="https://link.coupang.com/a/d3jyTd" target="_blank" class="ad-btn" onclick="linkClick()">결과 확인하기 (쿠팡 이동)</a>
-            <p class="ad-notice">쿠팡 파트너스 활동의 일환으로<br>소정의 수수료가 발생할 수 있습니다.</p>
-        </div>
-
-        <div id="result-screen" style="display: none;">
-            <h1>계산 결과</h1>
-            
-            <div class="blog-banner">
-                <a href="https://blog.naver.com/dowls027" target="_blank">
-                    더 자세한 정보는 <strong>A블로그</strong>에서 확인하세요 ➔
-                </a>
-            </div>
-
-            <div class="result-header">
-                <div class="label-sub">예상 실수령액(월)</div>
-                <div class="amount" id="net-pay">0원</div>
-                <div id="gross-pay" class="label-sub-small">월 소득액 0원</div>
-            </div>
-
-            <div class="percent-container">
-                <div class="percent-card">
-                    <span class="p-label" id="percent-title">2026 중위소득 대비</span>
-                    <span class="p-value" id="median-percent">0%</span>
-                </div>
-            </div>
-
-            <div class="detail-list">
-                <div class="detail-row"><span>국민연금</span><span id="tax-pension">0원</span></div>
-                <div class="detail-row"><span>건강보험</span><span id="tax-health">0원</span></div>
-                <div class="detail-row"><span>장기요양</span><span id="tax-care">0원</span></div>
-                <div class="detail-row"><span>고용보험</span><span id="tax-emp">0원</span></div>
-                <div class="detail-row"><span>근로소득세</span><span id="tax-income">0원</span></div>
-                <div class="detail-row"><span>지방소득세</span><span id="tax-local">0원</span></div>
-                <div class="detail-row total-wage"><span>시급 (209시간 기준)</span><span id="hourly-wage">0원</span></div>
-            </div>
-
-            <div class="compare-section">
-                <h3>중위소득 추이 (2024-2026)</h3>
-                <div class="chart-box"><canvas id="medianChart"></canvas></div>
-                
-                <div class="table-scroll">
-                    <table id="median-table">
-                        <thead>
-                            <tr>
-                                <th>연도</th>
-                                <th>1인</th><th>2인</th><th>3인</th><th>4인</th><th>5인</th><th>6인</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-
-            <p class="ad-notice-bottom">쿠팡 파트너스 활동의 일환으로 소정의 수수료가 발생할 수 있습니다.</p>
-            <button class="btn-reset" onclick="resetCalc()">다시 계산하기</button>
-        </div>
+<div id="result-screen" style="display: none;">
+    <h1>분석 결과</h1>
+    
+    <div class="result-card amount-section">
+        <div class="label-sub">월 예상 실수령액</div>
+        <div class="amount" id="net-pay">0원</div>
+        <div id="gross-pay" class="label-sub-small">세전 월 0원 기준</div>
     </div>
-    <script src="script.js"></script>
-</body>
-</html>
+
+    <div class="result-card position-section">
+        <span class="p-label" id="percent-title">2026년 1인 가구 기준</span>
+        <div class="p-value" id="median-percent">상위 0%</div>
+        <div class="progress-bar-container">
+            <div id="progress-fill" class="progress-fill"></div>
+        </div>
+        <p class="notice">* 중위소득 100%를 상위 50% 지점으로 산정</p>
+    </div>
+
+    <div class="result-card guide-section">
+        <h3>🏆 2026 소득 목표 가이드</h3>
+        <div class="guide-item">
+            <span>상위 10% 진입</span>
+            <strong id="top-10-val">0원</strong>
+        </div>
+        <div class="guide-item">
+            <span>상위 20% 진입</span>
+            <strong id="top-20-val">0원</strong>
+        </div>
+        <p class="guide-tip">※ 위 금액(세전) 이상일 때 해당 구간 진입이 예측됩니다.</p>
+    </div>
+
+    <div class="detail-list" id="tax-details"></div>
+    <div class="compare-section">
+        <div class="chart-box"><canvas id="medianChart"></canvas></div>
+    </div>
+    
+    <button class="btn-reset" onclick="resetCalc()">다시 계산하기</button>
+</div>
